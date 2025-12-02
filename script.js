@@ -236,47 +236,95 @@ window.addEventListener("load", () => {
 /* ========================
    Section 3 – Gallery slider
 ======================== */
-const galleryTrack = document.querySelector(".gallery-track");
-const gallerySliderFill = document.querySelector(".gallery-slider-fill");
+/* ========================
+   Gallery sliders (section3 + section5)
+======================== */
 
-if (galleryTrack && gallerySliderFill) {
-  // 👇 thumb가 전체 트랙의 몇 %를 차지할지 (CSS width랑 맞추면 깔끔)
-  const SLIDER_THUMB_PERCENT = 20; // CSS width: 20% 와 매칭
+const galleryTracks = document.querySelectorAll(".gallery-track");
 
-  // 1) 가로 스크롤 진행도에 따라 민트 thumb 위치 업데이트
+const SLIDER_THUMB_PERCENT = 20; // CSS width: 20%와 매칭
+
+galleryTracks.forEach((track) => {
+  const fill = track.parentElement.querySelector(".gallery-slider-fill");
+  if (!fill) return;
+
   const updateGallerySlider = () => {
-    const maxScroll = galleryTrack.scrollWidth - galleryTrack.clientWidth;
+    const maxScroll = track.scrollWidth - track.clientWidth;
 
     if (maxScroll <= 0) {
-      // 스크롤할 내용 없을 때는 왼쪽에 고정
-      gallerySliderFill.style.left = "0%";
+      fill.style.left = "0%";
       return;
     }
 
-    const ratio = galleryTrack.scrollLeft / maxScroll; // 0 ~ 1
-
-    // thumb가 움직일 수 있는 최대 범위: 슬라이더 너비(100%) - 셀 너비(20%) = 80%
+    const ratio = track.scrollLeft / maxScroll; // 0 ~ 1
     const maxOffset = 100 - SLIDER_THUMB_PERCENT;
     const leftPercent = ratio * maxOffset;
 
-    gallerySliderFill.style.left = `${leftPercent}%`;
+    fill.style.left = `${leftPercent}%`;
   };
 
-  galleryTrack.addEventListener("scroll", updateGallerySlider);
+  // 가로 스크롤에 따라 thumb 위치 업데이트
+  track.addEventListener("scroll", updateGallerySlider);
 
-  // 2) 데스크톱에서 휠 스크롤을 가로 스크롤로 변환
+  // 데스크톱에서 세로 휠을 가로 스크롤로 변환
   const handleWheel = (e) => {
-    if (window.innerWidth <= 768) return; // 모바일에서는 기본 세로 스크롤 유지
+    if (window.innerWidth <= 768) return; // 모바일에서는 기본 동작 유지
 
     if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
       e.preventDefault();
-      galleryTrack.scrollLeft += e.deltaY;
+      track.scrollLeft += e.deltaY;
     }
   };
 
-  galleryTrack.addEventListener("wheel", handleWheel, { passive: false });
+  track.addEventListener("wheel", handleWheel, { passive: false });
 
   // 초기 상태 계산
   window.addEventListener("load", updateGallerySlider);
   window.addEventListener("resize", updateGallerySlider);
+});
+
+/* ========================
+   Sticker pack download
+======================== */
+
+const downloadBtn = document.getElementById("downloadStickerBtn");
+
+if (downloadBtn) {
+  // ✅ 여기에 실제 스티커 이미지 파일 경로를 넣어주면 돼
+  // 예시: 프로젝트 루트에 /stickers 폴더 만들고 그 안에 저장
+  const stickerFiles = [
+    "./readbetweenthebrackets_stickers-01.png",
+   "./readbetweenthebrackets_stickers-02.png",
+   "./readbetweenthebrackets_stickers-03.png",
+   "./readbetweenthebrackets_stickers-04.png",
+   "./readbetweenthebrackets_stickers-05.png",
+   "./readbetweenthebrackets_stickers-06.png",
+   "./readbetweenthebrackets_stickers-07.png",
+   "./readbetweenthebrackets_stickers-08.png",
+   "./readbetweenthebrackets_stickers-09.png",
+   "./readbetweenthebrackets_stickers-10.png",
+   "./readbetweenthebrackets_stickers-11.png",
+   "./readbetweenthebrackets_stickers-12.png",
+   "./readbetweenthebrackets_stickers-13.png",
+   "./readbetweenthebrackets_stickers-14.png",
+   "./readbetweenthebrackets_stickers-15.png",
+   "./readbetweenthebrackets_stickers-16.png",
+
+  ];
+
+  const triggerDownload = (url) => {
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "";           // 파일명은 URL에서 자동으로 추론
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  downloadBtn.addEventListener("click", () => {
+    // 여러 파일을 순차적으로 다운로드 (약간 딜레이 줘서 브라우저 부담 줄이기)
+    stickerFiles.forEach((fileUrl, idx) => {
+      setTimeout(() => triggerDownload(fileUrl), idx * 150);
+    });
+  });
 }

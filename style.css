@@ -49,6 +49,7 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
   /* scroll-snap-type: y mandatory;  ← 여기서는 제거 */
+
 }
 
 
@@ -752,57 +753,159 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
   transform: translateY(-50%) translateX(6px);
 }
 /* =========================
-   SECTION 4 – Resources (Mobile)
+   SECTION 4 – Resources (Mobile unified span)
 ========================= */
 @media (max-width: 768px) {
 
-  /* 모바일에서는 왼쪽/오른쪽 컬럼 레이아웃을 세로 스택으로 */
   .section4-inner {
     flex-direction: column;
-    align-items: center;            /* 헤딩과 본문도 가운데 정렬 */
+    align-items: center;
     text-align: center;
     gap: 32px;
   }
 
-  /* 왼쪽 텍스트 블록도 가운데 정렬 */
   #section4 .section-content {
     max-width: 100%;
     text-align: center;
-    align-items: center;
     margin: 0 auto;
   }
 
-  /* 리소스 링크 블록 전체 센터 */
   .resource-links {
     width: 100%;
-    align-items: center;            /* 🔹 가운데로 */
-    margin: 0 auto;
+    align-items: center;
     gap: 24px;
   }
 
-  /* 링크 한 줄 전체 가운데 */
+  /* 🔹 모바일에서도 span(브래킷 폭) 고정하기 */
   .resource-link {
-    width: auto;                    /* 데스크탑 고정폭 → 모바일에서는 해제 */
-    justify-content: center;        /* 중앙 배치 */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: clamp(240px, 70vw, 340px);   /* 🔥 세 줄 모두 동일한 폭 */
     text-align: center;
   }
 
-  /* 가운데 텍스트 span은 flex-grow 제거 */
+  /* 텍스트 중앙 */
   .resource-link span:nth-child(2) {
-    flex: 0 0 auto;
+    flex: 1 0 auto;
     text-align: center;
   }
 
-  /* 브래킷은 텍스트 옆에 자연스럽게 붙게 */
+  /* 브래킷은 양 끝에 고정 */
   .resource-bracket {
-    position: static;
-    transform: none;
-    font-size: clamp(32px, 8vw, 48px);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    line-height: 1;
+    font-size: clamp(32px, 8vw, 46px);
   }
 
-  /* 모바일에서는 hover 시 이동 없앰 (터치 디바이스 기준) */
+  .resource-bracket--left {
+    left: 0;
+  }
+
+  .resource-bracket--right {
+    right: 0;
+  }
+
+  /* 모바일은 hover 의미 없음 */
   .resource-link:hover .resource-bracket--left,
   .resource-link:hover .resource-bracket--right {
-    transform: none;
+    transform: translateY(-50%);
+  }
+  #section4 .section-body {
+    margin-bottom: clamp(20px, 4vh, 36px);
+  }
+
+  /* 리소스 링크 전체 묶음: 20px → 약 절반 10~20px */
+  .resource-links {
+    margin-top: clamp(10px, 3vh, 24px);
+  }
+}
+
+
+/* SECTION 5 갤러리 전용 간격 줄이기 */
+/* 기존 세팅 유지 */
+#section5 .gallery-track {
+  gap: 3px; /* 기존 18px의 약 1/6 수준 */
+}
+
+#section5 .gallery-item {
+  min-width: min(40vw, 480px);  /* 필요하면 이것도 더 타이트하게 조정 가능 */
+}
+
+#section5 .gallery-block {
+  margin-right: clamp(40px, 8vw, 80px);  /* 원래대로 복구 */
+}
+
+@media (max-width: 768px) {
+  #section5 .gallery-track {
+    gap: 2px;
+  }
+
+  #section5 .gallery-item {
+    min-width: 65vw;  /* 섹션 3 = 80vw 대비 더 타이트 */
+  }
+}
+
+/* SECTION 5 – 데스크탑에서 슬라이더 바 길이만 축소 */
+@media (min-width: 769px) {
+  #section5 .gallery-slider {
+    width: calc(100% - clamp(20px, 4vw, 40px));
+    margin-left: clamp(15px, 3vw, 30px);
+    margin-top: 18px;
+  }
+}
+
+/* =========================
+   SECTION 5 – CTA button
+========================= */
+
+#section5 .section3-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 다운로드 버튼 스타일 */
+.cta-button {
+  margin-top: clamp(28px, 5vh, 40px); /* 본문 밑, 슬라이더 y와 비슷한 라인 */
+  padding: 14px 42px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--color-mint);
+  color: var(--color-dark);
+  font-family: "SeabirdsTrial", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* 호버 시 흰색으로 트랜지션 */
+.cta-button:hover {
+  background-color: var(--color-ivory);
+  color: var(--color-dark);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+}
+
+.cta-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  #section5 .cta-button {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
   }
 }
