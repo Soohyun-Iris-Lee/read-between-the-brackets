@@ -1,0 +1,808 @@
+/* =====================================
+   Base + Colors
+===================================== */
+/* 맨 위 아무 곳에 추가 */
+/* 모든 요소 패딩/보더 포함해서 사이즈 계산 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 스크롤 + 스냅 컨테이너는 html */
+html {
+  scroll-snap-type: y mandatory;
+}
+
+
+:root {
+  --color-mint: #7af596;
+  --color-dark: #241f21;
+  --color-ivory: #f0e8e3;
+
+  /* ⬇ This / phrase 왼쪽 시작점 조절용 (원하면 숫자만 바꾸면 됨) */
+  --hero-left-offset: clamp(40px, 7vw, 120px);
+}
+
+/* Font face 유지 */
+@font-face {
+  font-family: "SeabirdsTrial";
+  src: url("./SeabirdsTrial-Book.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "SeabirdsTrial";
+  src: url("./SeabirdsTrial-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "SeabirdsTrial", sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* scroll-snap-type: y mandatory;  ← 여기서는 제거 */
+}
+
+
+/* 기존 main 정의 대신 이렇게 */
+main {
+  /* height: 100vh;              🔴 삭제 */
+  /* scroll-snap-type: y mandatory; 🔴 삭제 */
+  /* overflow-y: scroll;           🔴 삭제 */
+
+  height: auto;
+  overflow: visible;
+}
+
+
+.section {
+  height: 100vh;                /* 뷰포트 한 장 */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: clamp(20px, 3vw, 48px);
+  flex: 0 0 auto;               /* 길이는 100vh만 사용 */
+}
+
+
+
+/* Backgrounds */
+.section--dark { background: var(--color-dark); color:var(--color-ivory); }
+.section--ivory { background: var(--color-ivory); color: var(--color-dark); }
+.section--mint { background: var(--color-mint); color: var(--color-dark); }
+
+/* =====================================
+   Logo position (1cm responsive)
+===================================== */
+.section-logo {
+  position: absolute;
+  top: clamp(16px, 2vw, 28px);
+  left: clamp(16px, 2vw, 28px);
+  width: clamp(110px, 12vw, 200px);
+  height: auto;
+  z-index: 10;
+}
+
+.section-logo--dark {
+  filter: brightness(0) saturate(100%);
+}
+
+/* =====================================
+   Section Content (2–5)
+===================================== */
+.section-content {
+  max-width: 720px;
+}
+
+.section-heading {
+  font-size: clamp(32px, 6vw, 64px);
+  margin-bottom: 16px;
+}
+
+.section-body {
+  font-size: clamp(14px, 1.4vw, 20px);
+  line-height: 1.6;
+}
+
+/* =====================================
+   Scroll Animation
+===================================== */
+.section-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================
+   Dot Navigation
+===================================== */
+#section1 {
+  align-items: center;
+  scroll-snap-align: start;
+}
+
+
+.side-nav {
+  position: fixed;
+  right: clamp(16px, 3vw, 32px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 50;
+}
+
+.nav-dot {
+  width: clamp(8px, 0.7vw, 12px);
+  height: clamp(8px, 0.7vw, 12px);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  background-color: rgba(240, 232, 227, 0.2);
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.nav-dot.active {
+  background-color: var(--color-mint);
+  transform: scale(1.35);
+}
+
+body.section-ivory .nav-dot {
+  background-color: rgba(36, 31, 33, 0.2);
+}
+body.section-ivory .nav-dot.active {
+  background-color: var(--color-dark);
+}
+
+body.section-mint .nav-dot {
+  background-color: rgba(36, 31, 33, 0.2);
+}
+body.section-mint .nav-dot.active {
+  background-color: var(--color-ivory);
+}
+
+@media (max-width: 768px) {
+  .side-nav {
+    top: auto;
+    bottom: 22px;
+    right: 20px;
+    transform: none;
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+/* =====================================
+   SECTION 1 – Hero layout
+===================================== */
+
+/* 섹션 1 내부 래퍼: 가운데 두고 위로 조금 올리기 */
+.hero-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: clamp(0px, 2vh, 16px) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transform: translateY(3vh) !important; /* ← 전체 블록을 화면 기준 아래로 2vh 내림 */
+}
+
+
+
+
+
+
+
+
+/* 텍스트 블록: 왼쪽 정렬 + offset */
+.hero-text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: var(--hero-left-offset);
+  gap: clamp(0px); /* ⬅ 여기 한 줄로 시작점 조절 */
+}
+
+/* phrase도 같은 라인에서 시작하도록 */
+.phrase-wrap {
+  position: relative;
+  display: inline-block;
+  margin-left: var(--hero-left-offset);
+  margin-top: clamp(20px, 4vh, 60px); /* ← 여기만 바꾸면 됨 */
+}
+
+
+/* 미디어 블록: 전체 너비에서 가운데 정렬 */
+.hero-media-block {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;         /* 🔴 -20px 말고 일단 0으로 정리 */
+  gap: clamp(4px, 0.7vw, 10px);
+}
+
+
+.media-shell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: clamp(80px, 8vw, 140px);
+  /* 기존: transition: column-gap 0.4s ease;  ← 이건 삭제 */
+}
+
+
+.media-shell--closed {
+  column-gap: 0; /* 필요하면 유지 */
+}
+
+
+/* 미디어 프레임: 세로 통일 + 비율 유지 */
+.media-frame {
+  height: min(40vh, 360px);   /* 세로 길이 통일 */
+  max-width: 100%;            /* 화면 밖으로 안 나가게 */
+  overflow: visible;          /* 크롭 방지 */
+  position: relative;
+  transform-origin: center center;
+  transition: transform 0.45s ease;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 수축 시 가로만 0에 가깝게 */
+.media-frame--closed {
+  transform: scaleX(0.001);
+}
+
+/* 이미지: 비율 유지 + 세로 기준 맞춤 */
+.media-frame img {
+  display: block;
+  height: 100%;      /* 세로 길이에 맞춰 스케일 */
+  width: auto;       /* 가로는 비율에 맞게 자유롭게 */
+  max-width: 100%;   /* 너무 넓으면 화면 안에서 줄어듦 */
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+}
+
+/* 브래킷 스타일 */
+.bracket {
+  font-family: "SeabirdsTrial", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: clamp(90px, 10vw, 150px);
+  color: var(--color-mint);
+
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+/* media-shell이 닫힐 때: 브래킷이 가운데로 확 붙도록 */
+.media-shell--closed .bracket--left {
+  transform: translateX(150%);
+}
+
+.media-shell--closed .bracket--right {
+  transform: translateX(-150%);
+}
+.highlight-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--color-mint);
+  z-index: -1;
+  transition: width 0.45s ease;  /* 줄어들 때도, 늘어날 때도 이걸 사용 */
+}
+
+
+
+/* phrase 텍스트 */
+.hero-title,
+.phrase-text {
+  font-size: clamp(70px, 7vw, 130px);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+
+.hero-section.section--dark  {
+  color:var(--color-ivory);
+}
+
+
+.hero-title,
+.phrase-text {
+  font-size: clamp(70px, 7vw, 130px);
+  font-weight: 600;
+  line-height: 1.05;
+}
+
+.phrase-text {
+ color:var(--color-dark)
+}
+/* 🔴 타이틀 margin을 직접 컨트롤 */
+.hero-title {
+  margin-top: 0;         /* 위 여백 최소화 */
+  margin-bottom: 0px;  /* 아래를 살짝 마이너스로 당겨서 미디어랑 붙이기 */
+}
+
+.support-wrap {
+  margin-left: var(--hero-left-offset);
+  margin-top: clamp(16px, 3vh, 28px);
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ← 유지 (support-text 왼쪽 정렬) */
+  position: relative;      /* 버튼 absolute 기준 */
+}
+
+
+.support-text {
+  margin: 0 0 24px 0;
+  font-size: clamp(13px, 1.4vw, 18px);
+  line-height: 1.5;
+  color: var(--color-ivory);
+  min-height: calc(1.5em * 2);   /* 두 줄 높이 고정 */
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+
+/* Learn more 버튼 */
+.hero-button {
+  display: block;        /* block으로 만들어야 margin auto가 적용됨 */
+  margin: 0 auto;        /* 화면 기준 가로 중앙 */
+  padding: 10px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 232, 227, 0);
+  background-color: rgba(240, 232, 227, 0.2);
+  color: var(--color-ivory);
+  font-family: seabirdsTrial, system-ui, sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* hover 시 색 반전 + 살짝 뜨는 느낌 */
+.hero-button:hover {
+  background-color: var(--color-ivory);
+  color: var(--color-dark);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.hero-button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  /* 섹션 패딩 줄이기 */
+  .section {
+    padding: 24px 24px 36px;
+  }
+
+  /* 모바일에서는 왼쪽 오프셋도 조금 줄이기 */
+  :root {
+    --hero-left-offset: 24px;
+  }
+
+  .hero-section {
+    transform: translateY(-2vh);
+  }
+
+  /* phrase 크기 줄여서 하이라이트가 화면 밖으로 안 나가게 */
+  .phrase-text {
+    font-size: clamp(30px, 10vw, 36px);
+  }
+
+  /* 이미지도 조금 작게 */
+  .media-frame {
+    width: min(58vw, 240px);  /* 가로는 적당히 줄이고 */
+    height: 200px;            /* 세로는 고정 (원하면 180~220px 정도로 조절 가능) */
+    max-width: 100%;
+    overflow: hidden;         /* 혹시 넘치는 부분은 잘라냄 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+   .media-frame img {
+    height: 100%;   /* 세로 고정된 프레임 안에 꽉 채우기 */
+    width: auto;    /* 가로는 비율에 따라 */
+    max-width: 100%;
+  }
+
+  /* 서포팅 텍스트: 기본 폰트 조금 더 작게 */
+  .support-text {
+    font-size: 12px;
+    max-width: 100%;
+  }
+
+  /* 버튼은 그대로 중앙 (이미 block + margin auto) */
+  .hero-button {
+    margin-top: 20px;
+    
+  }
+    .hero-title,
+  .phrase-text {
+    font-size: clamp(30px, 10vw, 36px);
+  }
+  .media-shell {
+    column-gap: clamp(36px, 2vw, 12px);  /* 기존보다 훨씬 좁게 */
+  }
+
+  /* 2. 브래킷 글자 크기 축소 (이미 했다면 유지) */
+  .bracket {
+    font-size: clamp(40px, 9vw, 70px);
+  }
+
+  /* 3. 브래킷 expand 애니메이션 이동 거리 축소 */
+  .media-shell--closed .bracket--left {
+    transform: translateX(300%); /* 기존 150% → 80% */
+  }
+
+  .media-shell--closed .bracket--right {
+    transform: translateX(-300%); /* 기존 150% → -80% */
+  }
+
+  }
+
+
+  /* =========================
+   SECTION 3 – Gallery layout
+========================= */
+/* =========================
+   SECTION 3 – Gallery layout
+========================= */
+
+/* =========================
+   SECTION 3 – Gallery layout
+========================= */
+
+.section3-inner {
+  display: flex;
+  gap: clamp(40px, 5vw, 80px);
+  width: 100%;
+  align-items: center;
+}
+
+/* 왼쪽 텍스트는 그대로 두기 (시작 x 포인트 유지용) */
+.section3-copy {
+  flex: 0 0 32%;
+  min-width: 260px;
+}
+
+#section3 .section-body {
+  max-width: 380px;
+}
+
+
+/* 갤러리 컨테이너 */
+.gallery-block {
+  flex: 1; /* ← 그대로 두고 안쪽만 키움 */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;  /* Allow flex shrinking */
+  margin-right: clamp(40px, 8vw, 80px);  /* Push gallery left */
+}
+
+/* 가로 스크롤 트랙 - 여기서 '세로 크기' 키우기 */
+/* 가로 스크롤 트랙: 세로 높이 통일 */
+/* 기존 gallery-track 를 이걸로 교체 */
+.gallery-track {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 4px;
+  width: 100%;
+  min-width: 0;
+
+  /* ✅ 갤러리 세로 사이즈 업 */
+  height: clamp(320px, 55vh, 560px);
+  align-items: center;
+}
+
+
+/* 각 카드: 세로 100% 고정, 가로는 일정 폭으로 */
+/* 기존 .gallery-item 를 이걸로 교체 */
+.gallery-item {
+  flex: 0 0 auto;          /* 가로는 콘텐츠 기준 */
+  height: 100%;            /* 세로는 track 고정값과 동일 */
+  width: auto;
+  min-width: min(52vw, 640px);  /* 화면의 절반 이상 차지하게 키움 */
+
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 이미지 + 비디오 공통 스타일: 비율 유지, 크롭 X */
+.gallery-item img,
+.gallery-item video {
+  display: block;
+  height: 100%;     /* 세로 고정 */
+  width: auto;      /* 가로는 비율대로 */
+  max-width: none;  /* 너무 넓어도 자르지 않음 (갤러리 가로로 계속 나가게) */
+  object-fit: contain;
+}
+
+
+
+/* 민트색 슬라이더 바 */
+.gallery-slider {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: transparent;   /* 🔴 회색/연한 바 완전 제거 */
+  overflow: visible;
+}
+
+
+
+.gallery-slider-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  /* 👇 항상 고정 길이 (원하는 비율로 조절: 15~30% 정도 추천) */
+  width: 20%;
+
+  border-radius: inherit;
+  background: var(--color-mint);
+
+  /* width 말고 left만 부드럽게 */
+  transition: left 0.15s linear;
+}
+
+/* =========================
+   SECTION 3 – Mobile layout
+========================= */
+@media (max-width: 768px) {
+  .section3-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .section3-copy {
+    flex: none;
+    width: 100%;
+  }
+
+  /* 갤러리는 문단 아래에, 폭은 100% */
+  .gallery-block {
+    width: 100%;
+    gap: 12px;
+  }
+
+  /* ✅ 세로 고정, 가로 자유 + 가로 스크롤 */
+  .gallery-track {
+    height: clamp(260px, 45vh, 360px);  /* 모바일용 세로 고정값 */
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 8px;
+  }
+
+  .gallery-item {
+    flex: 0 0 auto;              /* 가로는 콘텐츠/이미지에 따라 */
+    height: 100%;                /* 세로는 track 높이에 맞춤 */
+    min-width: 80vw;             /* 한 장이 화면의 대부분 차지 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .gallery-item img,
+  .gallery-item video {
+    height: 100%;                /* 🔴 세로 고정 */
+    width: auto;                 /* 🔴 가로는 비율대로 자유 */
+    max-width: none;
+    object-fit: contain;         /* 크롭 없이 전체 보이게 */
+  }
+}
+
+/* 완전 강제 숨김: gallery-slider 기본 회색바 제거 */
+.gallery-slider {
+  background: transparent !important;   /* 🔥 강제 투명 */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 혹시 내부에 기본 pseudo-element가 있을 경우 대비 */
+.gallery-slider::before,
+.gallery-slider::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* 민트색 바만 남기기 */
+.gallery-slider-fill {
+  background: var(--color-mint) !important;
+}
+.gallery-track::-webkit-scrollbar {
+  display: none !important;
+}
+
+.gallery-track {
+  -ms-overflow-style: none !important; /* IE/Edge */
+  scrollbar-width: none !important;    /* Firefox */
+}
+/* =========================
+   SECTION 4 – Resources (Updated)
+========================= */
+/* =========================
+   SECTION 4 – Resources
+========================= */
+
+/* =========================
+   SECTION 4 – Resources
+========================= */
+
+.section4-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: clamp(40px, 8vw, 120px);
+  width: 100%;
+}
+
+/* 왼쪽 텍스트 영역 */
+#section4 .section-content {
+  flex: 0 0 auto;
+  max-width: 720px;
+}
+
+/* 오른쪽 링크 블록 */
+.resource-links {
+  flex: 0 0 auto;
+  margin-left: auto;
+  margin-right: clamp(40px, 6vw, 80px);   /* 너무 오른쪽으로 안 붙게 여유 */
+  display: flex;
+  flex-direction: column;
+gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 */
+  align-items: flex-start;                 /* 🔴 왼쪽 기준으로 정렬 */
+}
+
+/* 한 줄 전체: 공통 폭 + 가운데 텍스트 + 양쪽 브래킷 */
+.resource-link {
+  position: relative;
+  display: flex;
+  justify-content: center;                /* 텍스트를 가운데로 */
+  align-items: center;
+  width: clamp(260px, 26vw, 360px);       /* 🔴 세 줄 모두 같은 span 폭 */
+  text-decoration: none;
+  color: var(--color-dark);
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* 가운데 텍스트(span 두 번째)를 위에 떠 있게 */
+.resource-link span:nth-child(2) {
+  position: relative;
+  z-index: 1;
+}
+
+/* 브래킷: 박스의 절대 좌·우에 고정 */
+.resource-bracket {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(40px, 4vw, 54px);
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.18s ease;
+}
+
+/* 왼쪽·오른쪽 위치 고정 */
+.resource-bracket--left {
+  left: 0;
+}
+.resource-bracket--right {
+  right: 0;
+}
+
+/* 🔹 hover 시 살짝만 벌어지게 (Y 이동은 유지) */
+.resource-link:hover .resource-bracket--left {
+  transform: translateY(-50%) translateX(-6px);
+}
+.resource-link:hover .resource-bracket--right {
+  transform: translateY(-50%) translateX(6px);
+}
+/* =========================
+   SECTION 4 – Resources (Mobile)
+========================= */
+@media (max-width: 768px) {
+
+  /* 모바일에서는 왼쪽/오른쪽 컬럼 레이아웃을 세로 스택으로 */
+  .section4-inner {
+    flex-direction: column;
+    align-items: center;            /* 헤딩과 본문도 가운데 정렬 */
+    text-align: center;
+    gap: 32px;
+  }
+
+  /* 왼쪽 텍스트 블록도 가운데 정렬 */
+  #section4 .section-content {
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  /* 리소스 링크 블록 전체 센터 */
+  .resource-links {
+    width: 100%;
+    align-items: center;            /* 🔹 가운데로 */
+    margin: 0 auto;
+    gap: 24px;
+  }
+
+  /* 링크 한 줄 전체 가운데 */
+  .resource-link {
+    width: auto;                    /* 데스크탑 고정폭 → 모바일에서는 해제 */
+    justify-content: center;        /* 중앙 배치 */
+    text-align: center;
+  }
+
+  /* 가운데 텍스트 span은 flex-grow 제거 */
+  .resource-link span:nth-child(2) {
+    flex: 0 0 auto;
+    text-align: center;
+  }
+
+  /* 브래킷은 텍스트 옆에 자연스럽게 붙게 */
+  .resource-bracket {
+    position: static;
+    transform: none;
+    font-size: clamp(32px, 8vw, 48px);
+  }
+
+  /* 모바일에서는 hover 시 이동 없앰 (터치 디바이스 기준) */
+  .resource-link:hover .resource-bracket--left,
+  .resource-link:hover .resource-bracket--right {
+    transform: none;
+  }
+}
