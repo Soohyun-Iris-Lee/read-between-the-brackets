@@ -9,6 +9,7 @@
   box-sizing: border-box;
 }
 
+
 /* 스크롤 + 스냅 컨테이너는 html */
 html {
   scroll-snap-type: y mandatory;
@@ -46,8 +47,8 @@ body {
 body {
   margin: 0;
   font-family: "SeabirdsTrial", sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto;
+
+background-color: #241f21;
   /* scroll-snap-type: y mandatory;  ← 여기서는 제거 */
 
 }
@@ -58,9 +59,9 @@ main {
   /* height: 100vh;              🔴 삭제 */
   /* scroll-snap-type: y mandatory; 🔴 삭제 */
   /* overflow-y: scroll;           🔴 삭제 */
-
+overflow: visible;
   height: auto;
-  overflow: visible;
+
 }
 
 
@@ -477,6 +478,86 @@ body.section-mint .nav-dot.active {
 
   }
 
+/* =========================
+   SECTION 2 – About
+========================= */
+
+/* 텍스트 + 이미지 래퍼 */
+/* =========================
+   SECTION 2 – About (updated)
+========================= */
+
+.section2-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+
+  gap: clamp(20px, 4vw, 60px);   /* ← gap 크게 줄였음 */
+  width: 100%;
+}
+
+/* 텍스트 폭 약간 줄여서 이미지 더 왼쪽 이동 */
+.section2-copy {
+  flex: 0 0 40%;   /* ← 46% → 40% (이미지 영역 확대) */
+  max-width: 540px;
+}
+
+/* 이미지 영역 확장 + 왼쪽으로 당김 */
+.section2-media {
+  flex: 1;                       /* 가용 공간 최대 활용 */
+  display: flex;
+  justify-content: flex-start;   /* ← 이미지 왼쪽 정렬 */
+  margin-left: 5vw;             /* ← 여기로 실제로 왼쪽으로 더 당김 */
+}
+
+/* 이미지 자체 크기 */
+.section2-media img {
+  width: clamp(420px, 46vw, 650px);  /* ← 더 크게 가능 (조절 쉬움) */
+  height: auto;
+  object-fit: cover;
+  border: none;
+  box-shadow: none;
+}
+
+
+@media (max-width: 768px) {
+  /* 섹션 2 레이아웃을 세로로 쌓기 + 왼쪽 정렬 */
+  #section2 .section2-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  /* 이미지가 항상 텍스트 위에 오도록 */
+  #section2 .section2-media {
+    order: -1;
+    width: 100%;
+    margin-left: 0;        /* 섹션 패딩선에 딱 붙게 */
+    justify-content: flex-start;
+  }
+
+  #section2 .section2-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 텍스트 블록도 전체 폭 사용 + 왼쪽 정렬 고정 */
+  #section2 .section2-copy {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #section2 .section-heading,
+  #section2 .section-body {
+    text-align: left;
+    margin-left: 0;
+  }
+}
+
+
+
 
   /* =========================
    SECTION 3 – Gallery layout
@@ -489,6 +570,7 @@ body.section-mint .nav-dot.active {
    SECTION 3 – Gallery layout
 ========================= */
 
+/* SECTION 3 – 왼쪽 텍스트 영역 넓히기 */
 .section3-inner {
   display: flex;
   gap: clamp(40px, 5vw, 80px);
@@ -496,14 +578,15 @@ body.section-mint .nav-dot.active {
   align-items: center;
 }
 
-/* 왼쪽 텍스트는 그대로 두기 (시작 x 포인트 유지용) */
+/* ⬇ 이 부분 수정 */
 .section3-copy {
-  flex: 0 0 32%;
-  min-width: 260px;
+  flex: 0 0 42%;      /* 32% → 42% 정도로 넓히기 */
+  min-width: 320px;   /* 여유 조금 더 주기 (원하면 300px 정도로 줄여도 됨) */
 }
 
+/* ⬇ 바디 텍스트 최대 폭도 넓혀주기 */
 #section3 .section-body {
-  max-width: 380px;
+  max-width: 520px;   /* 380px → 520px */
 }
 
 
@@ -594,6 +677,22 @@ body.section-mint .nav-dot.active {
   transition: left 0.15s linear;
 }
 
+.mobile-br {
+  display: none;
+}
+
+/* 모바일에서만 보이게 */
+@media (max-width: 768px) {
+  .mobile-br {
+    display: inline;
+  }
+
+  /* 데스크탑용 <br> 숨기기 (선택적) */
+  #section2 .section-body br:not(.mobile-br) {
+    display: none;
+  }
+}
+
 /* =========================
    SECTION 3 – Mobile layout
 ========================= */
@@ -641,6 +740,10 @@ body.section-mint .nav-dot.active {
     width: auto;                 /* 🔴 가로는 비율대로 자유 */
     max-width: none;
     object-fit: contain;         /* 크롭 없이 전체 보이게 */
+  }
+
+   #section3 .section-body br:not(.mobile-br) {
+    display: none;
   }
 }
 
@@ -695,6 +798,10 @@ body.section-mint .nav-dot.active {
   max-width: 720px;
 }
 
+.resource-text {
+   font-weight: 300 !important;
+}
+
 /* 오른쪽 링크 블록 */
 .resource-links {
   flex: 0 0 auto;
@@ -730,12 +837,14 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
 .resource-bracket {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%); /* 기본: 중앙에 붙어 있게 */
   font-size: clamp(40px, 4vw, 54px);
   line-height: 1;
   display: inline-block;
-  transition: transform 0.18s ease;
+  /* transform 대신 animation 쓸 거라 transition은 꺼줘도 됨 */
+  transition: none;
 }
+
 
 /* 왼쪽·오른쪽 위치 고정 */
 .resource-bracket--left {
@@ -746,55 +855,96 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
 }
 
 /* 🔹 hover 시 살짝만 벌어지게 (Y 이동은 유지) */
+/* 🔹 hover 시 더 크게 열리고 살짝 키우기 */
+/* Hover 시 브라켓 펄스 애니메이션 */
 .resource-link:hover .resource-bracket--left {
-  transform: translateY(-50%) translateX(-6px);
+  animation: resourceLeftSnap 0.38s cubic-bezier(.25, .85, .35, 1.25) forwards;
 }
+
 .resource-link:hover .resource-bracket--right {
-  transform: translateY(-50%) translateX(6px);
+  animation: resourceRightSnap 0.38s cubic-bezier(.25, .85, .35, 1.25) forwards;
 }
+
+
+
+/* 왼쪽 브라켓: 살짝 안으로 → 가운데 → 바깥으로 벌어짐 */
+@keyframes resourceLeftSnap {
+  0% {
+    transform: translateY(-50%) translateX(0);
+  }
+  22% {
+    transform: translateY(-50%) translateX(100%); /* 안으로 훅 */
+  }
+  100% {
+    transform: translateY(-50%) translateX(-28px) scale(1.04); /* 확 벌어짐 */
+  }
+}
+
+@keyframes resourceRightSnap {
+  0% {
+    transform: translateY(-50%) translateX(0);
+  }
+  22% {
+    transform: translateY(-50%) translateX(-100%); /* 안으로 훅 */
+  }
+  100% {
+    transform: translateY(-50%) translateX(28px) scale(1.04);
+  }
+}
+
+
+
 /* =========================
-   SECTION 4 – Resources (Mobile unified span)
+   SECTION 4 – Resources (Mobile)
 ========================= */
 @media (max-width: 768px) {
 
-  .section4-inner {
+  /* 섹션 전체 레이아웃 */
+  #section4 .section4-inner {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;   /* 제목/본문은 왼쪽에서 시작 */
+    text-align: left;
     gap: 32px;
   }
 
+  /* 제목 + 바디 텍스트: 왼쪽 정렬 */
   #section4 .section-content {
     max-width: 100%;
-    text-align: center;
-    margin: 0 auto;
+    text-align: left;
+    margin: 0;
   }
 
-  .resource-links {
+  /* 링크 묶음은 섹션 안에서 왼쪽에서 시작하되,
+     각 줄은 안에서 가운데 정렬되도록 */
+  #section4 .resource-links {
     width: 100%;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* 🔹 각 줄 박스(center) */
     gap: 24px;
+    margin-top: clamp(10px, 3vh, 24px);
   }
 
-  /* 🔹 모바일에서도 span(브래킷 폭) 고정하기 */
-  .resource-link {
+  /* 한 줄 전체 박스를 가운데 두고, 그 안에서 브라켓+텍스트 중앙 정렬 */
+  #section4 .resource-link {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;   /* 🔹 브라켓 + 텍스트 가운데 */
+    width: clamp(240px, 70vw, 340px);
+    text-align: center;
+    margin: 0 auto;            /* 🔹 화면 기준 중앙 배치 */
+  }
 
-    width: clamp(240px, 70vw, 340px);   /* 🔥 세 줄 모두 동일한 폭 */
+  /* 가운데 텍스트 */
+  #section4 .resource-link span:nth-child(2) {
+    position: relative;
+    z-index: 1;
     text-align: center;
   }
 
-  /* 텍스트 중앙 */
-  .resource-link span:nth-child(2) {
-    flex: 1 0 auto;
-    text-align: center;
-  }
-
-  /* 브래킷은 양 끝에 고정 */
-  .resource-bracket {
+  /* 브라켓은 양 끝 유지 */
+  #section4 .resource-bracket {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -802,26 +952,20 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
     font-size: clamp(32px, 8vw, 46px);
   }
 
-  .resource-bracket--left {
-    left: 0;
-  }
+  #section4 .resource-bracket--left  { left: 0; }
+  #section4 .resource-bracket--right { right: 0; }
 
-  .resource-bracket--right {
-    right: 0;
-  }
-
-  /* 모바일은 hover 의미 없음 */
-  .resource-link:hover .resource-bracket--left,
-  .resource-link:hover .resource-bracket--right {
+  /* hover 변화는 모바일에서 사실상 의미 없음 */
+  #section4 .resource-link:hover .resource-bracket--left,
+  #section4 .resource-link:hover .resource-bracket--right {
     transform: translateY(-50%);
   }
+
   #section4 .section-body {
     margin-bottom: clamp(20px, 4vh, 36px);
   }
-
-  /* 리소스 링크 전체 묶음: 20px → 약 절반 10~20px */
-  .resource-links {
-    margin-top: clamp(10px, 3vh, 24px);
+   #section4 .section-body br:not(.mobile-br) {
+    display: none;
   }
 }
 
@@ -842,7 +986,7 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
 
 @media (max-width: 768px) {
   #section5 .gallery-track {
-    gap: 2px;
+    gap: 9px;
   }
 
   #section5 .gallery-item {
@@ -907,5 +1051,117 @@ gap: clamp(60px, 10vh, 120px);  /* ← 기존 24~30px → 세로 간격 넓게 *
     margin-top: 20px;
     width: 100%;
     text-align: center;
+  }
+}
+@media (max-width: 768px) {
+  #section5 .cta-button {
+    margin-top: 20px;
+    margin-bottom: 36px;   /* 🔥 갭 확장: 버튼 밑 여백 추가 */
+
+    width: 70%;
+    padding: 10px 24px;
+    font-size: 14px;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
+@media (max-width: 768px) {
+  #section5 .cta-button {
+    margin-bottom: 36px;   /* 🔥 갤러리와의 간격만 늘리기 */
+  }
+    #section5 .section-body br:not(.mobile-br) {
+    display: none;
+  }
+}
+
+/* 이미지 드래그 썸네일 비활성화 */
+img {
+  -webkit-user-drag: none; /* Safari, Chrome */
+       /* 표준 */
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* Force section 3 and section 5 body text to Book weight */
+#section3 .section-body,
+#section5 .section-body,
+.section3-copy p,
+.section5-copy p {
+  font-weight: 300 !important;
+}
+/* DESKTOP ONLY: reduce spacing only for Section 5 gallery */
+/* FORCE desktop spacing only for section 5 */
+/* DESKTOP ONLY: Section 5 gallery cards narrower */
+@media (min-width: 769px) {
+  #section5 .gallery-track {
+    gap: 10px !important;  /* 살짝 여유, 원하면 4~10px로 조정 */
+  }
+
+  #section5 .gallery-item {
+    min-width: min(26vw, 540px) !important;
+    /* 52vw → 40vw 로 줄여서 한 화면에 더 가깝게 붙어 보이게 */
+  }
+}
+
+
+
+/* =========================
+   Lightbox (gallery zoom)
+========================= */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75); /* 배경 어둡게 */
+  display: none;                   /* 기본은 숨김 */
+  align-items: center;
+  justify-content: center;
+  z-index: 999;                    /* nav, 로고보다 위 */
+}
+
+.lightbox.is-open {
+  display: flex;
+}
+
+.lightbox-inner {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-inner img,
+.lightbox-inner video {
+  max-width: 100%;
+  max-height: 100%;
+  display: none;              /* 기본은 둘 다 숨김 */
+  border-radius: 10px;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.6);
+  background: #000;           /* 비디오 로딩 중 빈 화면 방지용 */
+}
+
+/* 활성화된 미디어만 보이게 */
+.lightbox-inner img.is-active,
+.lightbox-inner video.is-active {
+  display: block;
+}
+
+/* 모바일일 때는 조금 더 여유롭게 */
+@media (max-width: 768px) {
+  .lightbox-inner {
+    max-width: 94vw;
+    max-height: 86vh;
+  }
+
+  .lightbox-inner img {
+    border-radius: 10px;
   }
 }

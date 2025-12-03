@@ -61,7 +61,7 @@ const phrases = [
   "shapes perception."
 ];
 const supportTexts = [
-  "because it cropped out a Black climate activist Vanessa Nakate, erasing\nher presence while centering white activists.",
+  "because it cropped out a Black climate activist Vanessa Nakate,\nerasing her presence while centering white activists.",
 "because it was an AI-generated image depicting\nPope Francis in a luxury coat he never wore.",
   "because it was an AI-generated image that went viral\nduring the Hurricance Sandy to amply fear.",
   "because it promotes the false belief that a cloud formation\npredicts an earthquake, despite no scientific support.",
@@ -328,3 +328,97 @@ if (downloadBtn) {
     });
   });
 }
+/* ========================
+   Gallery lightbox (zoom on click – img + video)
+======================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const lightboxOverlay = document.getElementById("lightboxOverlay");
+  const lightboxImage   = document.getElementById("lightboxImage");
+  const lightboxVideo   = document.getElementById("lightboxVideo");
+
+  if (!lightboxOverlay || !lightboxImage || !lightboxVideo) return;
+
+  // 섹션 3 + 5 안의 모든 이미지/비디오 대상
+  const galleryMedia = document.querySelectorAll(
+    ".gallery-item img, .gallery-item video"
+  );
+
+  galleryMedia.forEach((mediaEl) => {
+    mediaEl.style.cursor = "zoom-in";
+
+    mediaEl.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // 매번 열기 전에 둘 다 비활성화 & 비디오 정리
+      lightboxImage.classList.remove("is-active");
+      lightboxVideo.classList.remove("is-active");
+      lightboxVideo.pause();
+      lightboxVideo.removeAttribute("src");
+
+      // 이미지 클릭인 경우
+      if (mediaEl.tagName.toLowerCase() === "img") {
+        const imgSrc = mediaEl.getAttribute("src");
+        if (!imgSrc) return;
+
+        lightboxImage.src = imgSrc;
+        lightboxImage.classList.add("is-active");
+      }
+
+      // 비디오 클릭인 경우
+      if (mediaEl.tagName.toLowerCase() === "video") {
+        let videoSrc = mediaEl.getAttribute("src");
+
+        // <video><source src="..."></video> 구조인 경우
+        if (!videoSrc) {
+          const sourceEl = mediaEl.querySelector("source");
+          if (sourceEl) {
+            videoSrc = sourceEl.getAttribute("src");
+          }
+        }
+
+        if (!videoSrc) return;
+
+        lightboxVideo.src = videoSrc;
+        lightboxVideo.classList.add("is-active");
+
+        // 자동 재생 (브라우저 정책 때문에 mute가 켜져 있어야 잘 됨)
+        lightboxVideo.play().catch(() => {});
+      }
+
+      // 오버레이 열기
+      lightboxOverlay.classList.add("is-open");
+    });
+  });
+
+  // 배경 클릭 → 닫기 (안쪽 박스 클릭 시 유지)
+  lightboxOverlay.addEventListener("click", (e) => {
+    const inside = e.target.closest(".lightbox-inner");
+    if (!inside) {
+      closeLightbox();
+    }
+  });
+
+  // ESC 키로 닫기
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" || e.key === "Esc") {
+      if (lightboxOverlay.classList.contains("is-open")) {
+        closeLightbox();
+      }
+    }
+  });
+
+  function closeLightbox() {
+    lightboxOverlay.classList.remove("is-open");
+
+    // 이미지 정리
+    lightboxImage.classList.remove("is-active");
+    lightboxImage.src = "";
+
+    // 비디오 정리
+    lightboxVideo.classList.remove("is-active");
+    lightboxVideo.pause();
+    lightboxVideo.removeAttribute("src");
+  }
+});
